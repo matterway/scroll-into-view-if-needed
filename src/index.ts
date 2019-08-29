@@ -23,7 +23,8 @@ function isOptionsObject<T>(options: any): options is T {
 
 function defaultBehavior(
   actions: CustomScrollAction[],
-  behavior: ScrollBehavior = 'auto'
+  behavior?: ScrollBehavior,
+  verticallyOnly?: boolean
 ) {
   const canSmoothScroll = 'scrollBehavior' in document.body.style
 
@@ -31,10 +32,12 @@ function defaultBehavior(
     // browser implements the new Element.prototype.scroll API that supports `behavior`
     // and guard window.scroll with supportsScrollBehavior
     if (el.scroll && canSmoothScroll) {
-      el.scroll({ top, left, behavior })
+      el.scroll(verticallyOnly ? { top, behavior } : { top, left, behavior })
     } else {
       el.scrollTop = top
-      el.scrollLeft = left
+      if (!verticallyOnly) {
+        el.scrollLeft = left
+      }
     }
   })
 }
@@ -84,7 +87,8 @@ function scrollIntoView<T>(target: Element, options?: Options<T> | boolean) {
   const computeOptions = getOptions(options)
   return defaultBehavior(
     compute(target, computeOptions),
-    computeOptions.behavior
+    computeOptions.behavior,
+    computeOptions.verticallyOnly
   )
 }
 
