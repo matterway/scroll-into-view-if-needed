@@ -10,13 +10,10 @@ node_modules
 selenium-debug.log
 
 # Typescript stuff
-typings
 src/*.js
 
 lerna-debug.log
 .next
 dist
-es
-umd
 /index.js
 /types.js
